@@ -9,18 +9,8 @@ pygame.init()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 clock = pygame.time.Clock()
 
-game_speed = BASE_GAME_SPEED
 bg_color = (255, 255, 255)
-# Load dino assets
-dino_imgs = [
-    pygame.image.load("assets/Dino1.png").convert_alpha(),
-    pygame.image.load("assets/Dino2.png").convert_alpha()
-]
-dinoducking_imgs = [
-    pygame.image.load("assets/DinoDucking1.png").convert_alpha(),
-    pygame.image.load("assets/DinoDucking2.png").convert_alpha()
-]
-dinojumping_img = pygame.image.load("assets/DinoJumping.png").convert_alpha()
+dinojumping_img = pygame.image.load("assets/dino.png").convert_alpha()
 # Load obstacle assets
 cactus_imgs = [
     pygame.image.load("assets/cacti/cactus1.png").convert_alpha(),
@@ -30,22 +20,21 @@ cactus_imgs = [
     pygame.image.load("assets/cacti/cactus5.png").convert_alpha(),
     pygame.image.load("assets/cacti/cactus6.png").convert_alpha()
 ]
-ptero_imgs = [
-    pygame.image.load("assets/Ptero1.png").convert_alpha(),
-    pygame.image.load("assets/Ptero2.png").convert_alpha()
-]
-# Load decoration assets
-cloud_img = pygame.image.load("assets/cloud.png").convert_alpha()
-ground_img = pygame.image.load("assets/ground.png").convert_alpha()
+# ptero_imgs = [
+#     pygame.image.load("assets/ptero1.png").convert_alpha(),
+#     pygame.image.load("assets/ptero2.png").convert_alpha()
+# ]
 
 # Create objects
-dino = Dino(50, 220, dinojumping_img)
+dino = Dino(50, 205, dinojumping_img)
 obstacles = []
 obstacle_timer = 0
 score = 0
 
 # Game loop
 running = True
+game_speed = BASE_GAME_SPEED
+obstacle_timer_random = random.randint(90, 180)
 while running:
     screen.fill(bg_color)
     dt = clock.tick(FPS)
@@ -63,14 +52,17 @@ while running:
 
     # Update
     dino.update()
-    if obstacle_timer > 90:
+    
+    # Generate the obstacle randomly
+    if obstacle_timer > obstacle_timer_random:
         obs_type = random.randint(0, 5)
         obstacles.append(Obstacle(cactus_imgs[obs_type], SCREEN_WIDTH))
         obstacle_timer = 0
+        obstacle_timer_random = random.randint(90, 180)
     else:
         obstacle_timer += 1
 
-
+    # Check if the obstacle is out of screen and dino collides with the obstacle
     for obs in obstacles[:]:
         obs.update(game_speed)
         if obs.is_off_screen():

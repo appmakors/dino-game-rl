@@ -3,7 +3,7 @@ from game.game_config import GRAVITY, JUMP_VELOCITY
 class Dino:
     def __init__(self, x, y, image):
         self.image = image
-        self.rect = self.image.get_rect(topleft=(x, y))
+        self.rect = self.image.get_rect(bottomleft=(x, y))
         self.is_jumping = False
         self.velocity = 0
 
@@ -12,8 +12,8 @@ class Dino:
             self.velocity += GRAVITY
             self.rect.y += self.velocity
 
-            if self.rect.y >= 220:  # ground level
-                self.rect.y = 220
+            if self.rect.y >= 205:  # ground level
+                self.rect.y = 205
                 self.velocity = 0
                 self.is_jumping = False
 

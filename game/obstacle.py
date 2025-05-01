@@ -3,7 +3,7 @@ from game.game_config import BASE_GAME_SPEED
 class Obstacle:
     def __init__(self, image, x):
         self.image = image
-        self.rect = self.image.get_rect(topleft=(x, 230))
+        self.rect = self.image.get_rect(bottomleft=(x, 250))
 
     def update(self, game_speed=BASE_GAME_SPEED):
         self.rect.x -= game_speed
