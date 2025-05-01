@@ -72,7 +72,7 @@ python run_agent.py
 
 ### 1. Clone this repository
 ```bash
-git clone https://github.com/YOUR_USERNAME/dino_game_rl.git
+git clone https://github.com/appmakors/dino-game-rl.git
 cd dino_game_rl
 ```
 
