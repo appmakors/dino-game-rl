@@ -3,10 +3,10 @@ import sys
 import random
 from game.dino import Dino
 from game.obstacle import Obstacle
-from game.game_config import SCREEN_WIDTH, SCREEN_HEIGHT, FPS, BASE_GAME_SPEED, INCREASE_SPEED_AFTER
+from game.game_config import SCREEN_WIDTH, SCREEN_HEIGHT, FPS, BASE_GAME_SPEED, INCREASE_SPEED_AFTER, GROUND_LEVEL
 
 # Toggle this to False when training your RL agent
-render_mode = False
+render_mode = True
 
 pygame.init()
 screen = None
@@ -27,6 +27,14 @@ for i in range(1, 7):
         img = img.convert_alpha()
     cactus_imgs.append(img)
 
+# Load ground image
+ground_img = pygame.image.load("assets/ground.png")
+if render_mode:
+    ground_img = ground_img.convert_alpha()
+ground_x1 = 0
+ground_x2 = ground_img.get_width()
+ground_y = GROUND_LEVEL - ground_img.get_height() / 2
+
 # ptero_imgs = [
 #     pygame.image.load("assets/ptero1.png").convert_alpha(),
 #     pygame.image.load("assets/ptero2.png").convert_alpha()
@@ -42,11 +50,9 @@ score = 0
 running = True
 game_speed = BASE_GAME_SPEED
 obstacle_timer_random = random.randint(90, 180)
-
 while running:
     if render_mode:
         screen.fill(bg_color)
-
     dt = clock.tick(FPS) if render_mode else 0
 
     for event in pygame.event.get():
@@ -91,8 +97,22 @@ while running:
         for obs in obstacles:
             obs.draw(screen)
 
+        # Draw score
         font = pygame.font.Font("assets/PressStart2P-Regular.ttf", 20)
         score_surface = font.render(f"Score: {score}", True, (0, 0, 0))
         screen.blit(score_surface, (10, 10))
+
+
+        # Draw and scroll the ground
+        ground_x1 -= game_speed
+        ground_x2 -= game_speed
+
+        if ground_x1 + ground_img.get_width() < 0:
+            ground_x1 = ground_x2 + ground_img.get_width()
+        if ground_x2 + ground_img.get_width() < 0:
+            ground_x2 = ground_x1 + ground_img.get_width()
+
+        screen.blit(ground_img, (ground_x1, ground_y))
+        screen.blit(ground_img, (ground_x2, ground_y))
 
         pygame.display.update()
